@@ -1,22 +1,4 @@
-class XMLTag:
-    name = str
-    attributes = dict()  # no init and {} or dict() makes this static?!
-    characters = str
-    # Tag Tree Hierachy
-    parent = None
-    children = list()  # no init and [] or list() makes this static?!
-    # Tag construction: Only valid if both start and end tags are valid
-    hasStartElement = False
-    hasEndElement = False
-
-    def __init__(self):
-        self.name = None
-        self.attributes = {}
-        self.characters = None
-        self.parent = None
-        self.children = []
-        self.hasStartElement = False
-        self.hasEndElement = False
+from XMLTag import XMLTag
 
 ##
 # Can be disabled within function, or overridden. prints to stdout when enabled
@@ -39,16 +21,21 @@ def log(s, newLine = bool):
 ##
 class AbstractXMLWriterHandler:
 
-    rootTag = None
+    _rootTag = None
 
-    def __int__(self, rootTag = XMLTag):
+    ##
+    # Perform object initiation logic here, or provide a mechanism of doing so
+    ##
+    def __init__(self, rootTag = None):
+        self._rootTag = rootTag if rootTag.__class__ == XMLTag else None
         pass
 
 
     ##
-    # Override this. This should return the conversion of your entity model to GPXTag
-    # Returns: 
+    # Don't Override this. This should return the conversion of your entity model to GPXTag
+    # Construct the rootTag object that represents your data during initiation of the handler.
+    # Returns:
     #   - root_GpxTag to write from
     ##
-    def to_GPXTag(self):
-        s = str
+    def getData(self):
+        return self._rootTag
